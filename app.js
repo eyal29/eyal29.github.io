@@ -1002,6 +1002,37 @@ const FORCED_MERGE_START_X = X_TAPIS + 1.8;
 const FORCED_MERGE_HARD_STOP_X = X_TAPIS + TAPIS_LEN + 1.0;
 const FORCED_MERGE_SPEED_FACTOR = 0.45;
 const FORCED_MERGE_LANE_SMOOTHING = 0.11;
+const RIGHT_LANE_QUEUE_HOLD_X = X_TAPIS - 0.9;
+const RIGHT_LANE_QUEUE_SLOW_ZONE = 4.0;
+const MERGE_COMPLETION_Y_EPS = 0.08;
+
+function getRightLaneMergeLockCar() {
+  const mergeLaneY = laneCenter(workLaneIndex + 1);
+  const corridorMinY = Math.min(yWork, mergeLaneY) - 0.18;
+  const corridorMaxY = Math.max(yWork, mergeLaneY) + 0.18;
+
+  let lockCar = null;
+  let bestX = -Infinity;
+
+  for (const car of cars) {
+    if (car.position.x <= FORCED_MERGE_START_X) continue;
+
+    const stillInWorkLane = car.userData.lane === workLaneIndex || car.userData.laneTarget === workLaneIndex;
+    const inMergeCorridor =
+      car.position.y > corridorMinY &&
+      car.position.y < corridorMaxY &&
+      Math.abs(car.position.y - mergeLaneY) > MERGE_COMPLETION_Y_EPS;
+
+    if (!stillInWorkLane && !inMergeCorridor) continue;
+
+    if (car.position.x > bestX) {
+      bestX = car.position.x;
+      lockCar = car;
+    }
+  }
+
+  return lockCar;
+}
 
 function hasSafeGapForLaneChange(car, targetLane) {
   const targetY = laneCenter(targetLane);
@@ -1029,6 +1060,7 @@ function updateTraffic(dt) {
   const lanes = Array.from({ length: laneCount }, () => []);
   cars.forEach(c => lanes[c.userData.lane].push(c));
   lanes.forEach(arr => arr.sort((a, b) => a.position.x - b.position.x));
+  const rightLaneLockCar = getRightLaneMergeLockCar();
 
   let alertActive = false;
   let maxRisk = 0;
@@ -1053,6 +1085,19 @@ function updateTraffic(dt) {
         const dist = front.position.x - car.position.x;
         if (dist < 3.0) speed *= 0.10;
         else if (dist < 6.0) speed *= 0.55;
+      }
+
+      // file d'attente avant tapis : tant que la voiture précédente n'est pas rabattue,
+      // aucune autre voiture ne doit arriver sur la voie de droite
+      if (lane === workLaneIndex && rightLaneLockCar && car !== rightLaneLockCar) {
+        const dxHold = RIGHT_LANE_QUEUE_HOLD_X - car.position.x;
+
+        if (dxHold <= 0) {
+          car.position.x = RIGHT_LANE_QUEUE_HOLD_X;
+          speed = 0;
+        } else if (dxHold < RIGHT_LANE_QUEUE_SLOW_ZONE) {
+          speed *= 0.08;
+        }
       }
 
       // rabattement automatique avec contrôle du créneau

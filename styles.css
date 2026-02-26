@@ -1,0 +1,202 @@
+html,
+body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #050607
+}
+
+canvas {
+    display: block
+}
+
+#realViewCard {
+    position: fixed;
+    top: 80px;
+    right: 18px;
+    width: 260px;
+    z-index: 20;
+    background: linear-gradient(135deg, rgba(40, 44, 60, 0.98) 60%, rgba(80, 120, 255, 0.18) 100%);
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28), 0 0 0 2px rgba(80, 120, 255, 0.18);
+    border: 2.5px solid rgba(80, 120, 255, 0.22);
+    padding: 18px 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    backdrop-filter: blur(8px);
+    transition: box-shadow 0.2s;
+}
+
+.realViewImg {
+    width: 210px;
+    height: auto;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(80, 120, 255, 0.10), 0 1.5px 8px rgba(0, 0, 0, 0.13);
+    background: rgba(0, 0, 0, 0.13);
+    border: 2px solid rgba(80, 120, 255, 0.18);
+    margin-bottom: 0;
+    transition: transform 0.18s, box-shadow 0.18s;
+    cursor: pointer;
+}
+
+.realViewImg:hover {
+    transform: scale(1.035) rotate(-1deg);
+    box-shadow: 0 8px 32px rgba(80, 120, 255, 0.22), 0 2px 16px rgba(0, 0, 0, 0.18);
+    border-color: #fff;
+}
+
+.realViewTitle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0.35px;
+    margin: 0 0 4px;
+    background: linear-gradient(90deg, #ffffff, #d7e2ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 10px rgba(80, 120, 255, 0.24);
+}
+
+.realViewTitleIcon {
+    width: 14px;
+    height: 14px;
+    opacity: 0.95;
+    flex: 0 0 auto;
+}
+
+#hud {
+    position: fixed;
+    left: 14px;
+    top: 14px;
+    font-family: system-ui, Segoe UI, Arial;
+    color: #fff;
+    background: rgba(0, 0, 0, .45);
+    backdrop-filter: blur(6px);
+    padding: 12px 14px;
+    border-radius: 14px;
+    line-height: 1.35;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    min-width: 280px;
+}
+
+#risk {
+    font-weight: 900
+}
+
+#pill {
+    margin-top: 8px;
+    display: inline-block;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-weight: 800;
+    letter-spacing: .2px;
+}
+
+.ok {
+    background: rgba(0, 170, 90, .25);
+    border: 1px solid rgba(0, 170, 90, .5)
+}
+
+.warn {
+    background: rgba(255, 160, 0, .25);
+    border: 1px solid rgba(255, 160, 0, .5)
+}
+
+.bad {
+    background: rgba(255, 0, 0, .22);
+    border: 1px solid rgba(255, 0, 0, .5);
+    animation: pulse .6s infinite alternate;
+}
+
+@keyframes pulse {
+    from {
+        transform: scale(1)
+    }
+
+    to {
+        transform: scale(1.03)
+    }
+}
+
+#controls {
+    position: fixed;
+    right: 14px;
+    top: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-family: system-ui, Segoe UI, Arial;
+    color: #fff;
+    background: rgba(0, 0, 0, .35);
+    backdrop-filter: blur(6px);
+    padding: 10px 12px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .30);
+}
+
+#topStatus {
+    position: fixed;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, .34);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .28);
+    font-family: system-ui, Segoe UI, Arial;
+    color: #fff;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.sChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .15px;
+    background: rgba(255, 255, 255, .10);
+    border: 1px solid rgba(255, 255, 255, .20);
+    white-space: nowrap;
+}
+
+.sLabel {
+    opacity: .78;
+    font-weight: 600;
+}
+
+.sAlertOn {
+    background: rgba(255, 64, 64, .28);
+    border-color: rgba(255, 128, 128, .55);
+}
+
+button {
+    border: 0;
+    color: #fff;
+    background: rgba(255, 255, 255, .12);
+    padding: 8px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+button:hover {
+    background: rgba(255, 255, 255, .18)
+}
+
+input[type="range"] {
+    width: 140px
+}

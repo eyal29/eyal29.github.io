@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Simulation 3D – Chantier Autoroute</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div id="hud">
+    <div style="font-weight:900; font-size:15px;">Simulation 3D — Chantier Autoroute</div>
+    <div style="opacity:.9; margin-top:4px;">Caméra FLR + scoring de risque + alerte ouvriers</div>
+    <div style="margin-top:10px;">Risque: <span id="risk">0%</span></div>
+    <div id="pill" class="ok">OK — surveillance active</div>
+  </div>
+  <div id="realViewCard">
+    <div class="realViewTitle">
+      <svg class="realViewTitleIcon" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" fill="#5078ff" opacity="0.22" />
+        <path d="M12 7.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 0 1 0-9zm0 1.5a3 3 0 1 0 0 6a3 3 0 0 0 0-6z" fill="#fff" />
+        <circle cx="12" cy="12" r="1.2" fill="#5078ff" />
+      </svg>
+      Vues réelles chantier
+    </div>
+    <img class="realViewImg" src="image_tapis.png" alt="Visualisation du tapis réel" />
+    <img class="realViewImg" src="cam_hackathon.png" alt="Caméra Hackathon" />
+  </div>
+
+  <div id="controls">
+    <button id="btnPlay">Pause</button>
+    <label style="opacity:.9;">Trafic</label>
+    <input id="traffic" type="range" min="5" max="30" value="14" />
+  </div>
+
+  <div id="topStatus">
+    <div class="sChip"><span class="sLabel">Trafic</span><span id="sTraffic">14</span></div>
+    <div class="sChip"><span class="sLabel">Véhicules</span><span id="sCars">14</span></div>
+    <div class="sChip"><span class="sLabel">Caméra</span><span id="sCam">Libre</span></div>
+    <div class="sChip"><span class="sLabel">Simulation</span><span id="sSim">Active</span></div>
+    <div class="sChip" id="sSignalChip"><span class="sLabel">Signal FLR</span><span id="sSignal">Standby</span></div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module" src="app.js"></script>
+</body>
+
+</html>

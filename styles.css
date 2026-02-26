@@ -14,23 +14,23 @@ canvas {
     position: fixed;
     top: 80px;
     right: 18px;
-    width: min(260px, 28vw);
+    width: min(220px, 24vw);
     z-index: 20;
     background: linear-gradient(135deg, rgba(40, 44, 60, 0.98) 60%, rgba(80, 120, 255, 0.18) 100%);
-    border-radius: 22px;
+    border-radius: 18px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28), 0 0 0 2px rgba(80, 120, 255, 0.18);
     border: 2.5px solid rgba(80, 120, 255, 0.22);
-    padding: 18px 16px 16px 16px;
+    padding: 12px 10px 10px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
     backdrop-filter: blur(8px);
     transition: box-shadow 0.2s;
 }
 
 .realViewImg {
-    width: min(210px, 100%);
+    width: min(180px, 100%);
     height: auto;
     border-radius: 14px;
     box-shadow: 0 4px 18px rgba(80, 120, 255, 0.10), 0 1.5px 8px rgba(0, 0, 0, 0.13);
@@ -269,16 +269,17 @@ canvas {
 }
 
 #pill {
-    margin-top: 8px;
+    margin-top: 6px;
     display: block;
-    width: 100%;
+    width: 60%;
     max-width: 100%;
     box-sizing: border-box;
-    padding: clamp(5px, 0.8vw, 7px) clamp(7px, 1vw, 10px);
+    padding: clamp(3px, 0.5vw, 5px) clamp(6px, 0.8vw, 8px);
     border-radius: 999px;
     font-weight: 800;
     letter-spacing: .2px;
-    line-height: 1.2;
+    font-size: clamp(10px, 0.8vw, 12px);
+    line-height: 1.15;
     white-space: normal;
 }
 
@@ -313,14 +314,14 @@ canvas {
     right: 14px;
     top: 14px;
     display: flex;
-    gap: clamp(5px, 0.8vw, 10px);
+    gap: clamp(4px, 0.6vw, 7px);
     align-items: center;
     font-family: system-ui, Segoe UI, Arial;
     color: #fff;
     background: rgba(0, 0, 0, .35);
     backdrop-filter: blur(6px);
-    padding: clamp(6px, 0.9vw, 10px) clamp(7px, 1vw, 12px);
-    border-radius: clamp(10px, 1.2vw, 14px);
+    padding: clamp(4px, 0.6vw, 7px) clamp(6px, 0.8vw, 9px);
+    border-radius: clamp(8px, 1vw, 11px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, .30);
 }
 
@@ -374,7 +375,7 @@ button {
     border: 0;
     color: #fff;
     background: rgba(255, 255, 255, .12);
-    padding: clamp(5px, 0.7vw, 8px) clamp(7px, 0.9vw, 10px);
+    padding: clamp(4px, 0.55vw, 6px) clamp(6px, 0.75vw, 8px);
     border-radius: clamp(7px, 0.8vw, 10px);
     cursor: pointer;
     font-weight: 700;
@@ -385,18 +386,18 @@ button:hover {
 }
 
 input[type="range"] {
-    width: clamp(70px, 10vw, 140px)
+    width: clamp(56px, 7.5vw, 110px)
 }
 
 @media (max-width: 1400px) {
     #realViewCard {
-        width: min(230px, 24vw);
-        padding: 14px 12px 12px;
+        width: min(200px, 22vw);
+        padding: 11px 9px 9px;
         gap: 12px;
     }
 
     .realViewImg {
-        width: min(180px, 100%);
+        width: min(160px, 100%);
     }
 
     #hud {
@@ -411,12 +412,12 @@ input[type="range"] {
 
 @media (max-width: 1180px) {
     #realViewCard {
-        width: min(190px, 21vw);
-        padding: 11px 10px 10px;
+        width: min(170px, 19vw);
+        padding: 9px 8px 8px;
     }
 
     .realViewImg {
-        width: min(150px, 100%);
+        width: min(138px, 100%);
     }
 
     #hud {
@@ -425,7 +426,7 @@ input[type="range"] {
     }
 
     #controls {
-        max-width: 24vw;
+        max-width: 20vw;
     }
 
     #topStatus {
@@ -438,8 +439,8 @@ input[type="range"] {
         top: auto;
         right: 10px;
         bottom: 58px;
-        width: min(170px, 40vw);
-        padding: 8px;
+        width: min(150px, 36vw);
+        padding: 7px;
         border-radius: 14px;
         max-height: none;
         overflow: hidden;
@@ -457,7 +458,7 @@ input[type="range"] {
     }
 
     #controls {
-        max-width: 42vw;
+        max-width: 34vw;
         right: 10px;
         top: 10px;
     }

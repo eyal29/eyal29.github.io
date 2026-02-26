@@ -998,6 +998,10 @@ function setRisk(pct) {
 // ---------- Traffic update (anti-collision par voie) ----------
 const MERGE_FRONT_GAP = 6.5;
 const MERGE_REAR_GAP = 5.0;
+const FORCED_MERGE_START_X = X_TAPIS + 1.8;
+const FORCED_MERGE_HARD_STOP_X = X_TAPIS + TAPIS_LEN + 1.0;
+const FORCED_MERGE_SPEED_FACTOR = 0.45;
+const FORCED_MERGE_LANE_SMOOTHING = 0.11;
 
 function hasSafeGapForLaneChange(car, targetLane) {
   const targetY = laneCenter(targetLane);
@@ -1052,10 +1056,18 @@ function updateTraffic(dt) {
       }
 
       // rabattement automatique avec contrôle du créneau
-      if (car.userData.lane === workLaneIndex && car.position.x > X_TAPIS + 2.5) {
+      let mustLeaveWorkLane = false;
+      if (car.userData.lane === workLaneIndex && car.position.x > FORCED_MERGE_START_X) {
+        mustLeaveWorkLane = true;
         const targetLane = workLaneIndex + 1;
         const canMerge = hasSafeGapForLaneChange(car, targetLane);
         car.userData.laneTarget = canMerge ? targetLane : car.userData.lane;
+
+        if (car.userData.laneTarget === targetLane) {
+          speed *= FORCED_MERGE_SPEED_FACTOR;
+        } else {
+          speed = car.position.x >= FORCED_MERGE_HARD_STOP_X ? 0 : speed * 0.12;
+        }
       } else {
         car.userData.laneTarget = car.userData.lane;
       }
@@ -1063,7 +1075,8 @@ function updateTraffic(dt) {
       // interpolation Y
       const targetY = laneCenter(car.userData.laneTarget);
       const dy = targetY - car.position.y;
-      car.position.y += dy * LANE_CHANGE_SMOOTHING;
+      const laneSmoothing = mustLeaveWorkLane ? FORCED_MERGE_LANE_SMOOTHING : LANE_CHANGE_SMOOTHING;
+      car.position.y += dy * laneSmoothing;
       car.rotation.z = -dy * 0.08;
 
       if (Math.abs(dy) < 0.02) {

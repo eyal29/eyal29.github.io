@@ -10,9 +10,15 @@
 
 <body>
   <div id="hud">
-    <div style="font-weight:900; font-size:15px;">Simulation 3D — Chantier Autoroute</div>
-    <div style="opacity:.9; margin-top:4px;">Caméra FLR + scoring de risque + alerte ouvriers</div>
-    <div style="margin-top:10px;">Risque: <span id="risk">0%</span></div>
+    <div class="hudHead">
+      <span class="hudBadge">DFI</span>
+      <div class="hudTitles">
+        <div class="hudTitle">Dispositif de Franchissement Intelligent</div>
+        <div class="hudSubtitle">Simulation 3D — Sécurité de chantier autoroutier</div>
+      </div>
+    </div>
+    <div class="hudMeta">Caméra FLR, analyse trafic et alerte ouvriers connectés</div>
+    <div class="hudRisk">Risque: <span id="risk">0%</span></div>
     <div id="pill" class="ok">OK — surveillance active</div>
   </div>
   <div id="realViewCard">
@@ -24,8 +30,21 @@
       </svg>
       Vues réelles chantier
     </div>
-    <img class="realViewImg" src="image_tapis.png" alt="Visualisation du tapis réel" />
-    <img class="realViewImg" src="cam_hackathon.png" alt="Caméra Hackathon" />
+    <img class="realViewImg" src="image_tapis.png" alt="Tapis sensoriel de sécurité"
+      data-title="Tapis sensoriel de sécurité"
+      data-description-html="<strong>Capteurs de pression intégrés</strong> convertissant l'énergie mécanique du pneu en signal électrique instantané.<br><strong>Caoutchouc haute densité</strong> pour l'absorption des chocs.<br><em>Dimensions :</em><br>• largeur : <strong>3,5 m</strong><br>• longueur : <strong>15 m</strong><br>• épaisseur : <strong>30 mm</strong>" />
+    <img class="realViewImg" src="cam_hackathon.png" alt="Caméra 360° intelligente" data-title="Caméra 360° intelligente"
+      data-description-html="<strong>Vision panoramique</strong> : optique 360° Global Shutter capturant toute la scène en une fraction de milliseconde.<br><strong>IA embarquée</strong> : modèle YOLOv8 optimisé TensorRT sur NVIDIA Jetson, analyse en <strong>10 à 30 ms</strong>.<br><strong>Énergie verte</strong> : alimentation continue via panneau photovoltaïque et batterie tampon, avec <em>autonomie totale</em> sur chantier mobile." />
+  </div>
+
+  <div id="imageInfoModal" class="imageModal hidden" role="dialog" aria-modal="true" aria-labelledby="imageInfoTitle">
+    <div class="imageModalBackdrop" data-close-modal="true"></div>
+    <div class="imageModalCard">
+      <button id="imageInfoClose" class="imageModalClose" type="button" aria-label="Fermer">✕</button>
+      <div class="imageModalTag">Détail visuel</div>
+      <h3 id="imageInfoTitle" class="imageModalTitle">[TEXTE]</h3>
+      <p id="imageInfoText" class="imageModalText">[TEXTE]</p>
+    </div>
   </div>
 
   <div id="controls">

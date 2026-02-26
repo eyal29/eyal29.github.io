@@ -70,6 +70,119 @@ canvas {
     flex: 0 0 auto;
 }
 
+.imageModal {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .24s ease;
+}
+
+.imageModal.hidden {
+    display: none;
+}
+
+.imageModal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.imageModalBackdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 5, 12, .62);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity .24s ease;
+}
+
+.imageModalCard {
+    position: relative;
+    z-index: 1;
+    width: min(430px, calc(100vw - 36px));
+    padding: 20px 18px 18px;
+    border-radius: 18px;
+    border: 1.5px solid rgba(116, 173, 255, .42);
+    background: linear-gradient(150deg, rgba(16, 22, 38, .96), rgba(28, 41, 70, .92));
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .46), 0 0 0 2px rgba(103, 172, 255, .16);
+    color: #eaf2ff;
+    font-family: "Segoe UI", Arial, sans-serif;
+    transform: translateY(20px) scale(.97);
+    opacity: 0;
+    transition: transform .28s cubic-bezier(.22, .86, .32, 1), opacity .24s ease;
+}
+
+.imageModal.is-open .imageModalBackdrop {
+    opacity: 1;
+}
+
+.imageModal.is-open .imageModalCard {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.imageModalClose {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, .2);
+    background: rgba(255, 255, 255, .08);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.imageModalClose:hover {
+    background: rgba(255, 255, 255, .16);
+}
+
+.imageModalTag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .35px;
+    text-transform: uppercase;
+    color: #cce7ff;
+    background: rgba(66, 150, 255, .2);
+    border: 1px solid rgba(130, 198, 255, .44);
+}
+
+.imageModalTitle {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.25;
+    font-weight: 900;
+    color: #ffffff;
+}
+
+.imageModalText {
+    margin: 10px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(229, 238, 255, .94);
+    white-space: pre-line;
+}
+
+.imageModalText strong {
+    color: #ffffff;
+    font-weight: 800;
+}
+
+.imageModalText em {
+    color: #c9dcff;
+    font-style: italic;
+}
+
 #hud {
     position: fixed;
     left: 14px;
@@ -82,7 +195,64 @@ canvas {
     border-radius: 14px;
     line-height: 1.35;
     box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
-    min-width: 280px;
+    min-width: 360px;
+}
+
+.hudHead {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.hudBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .4px;
+    color: #e5f7ff;
+    background: linear-gradient(90deg, rgba(26, 124, 255, .72), rgba(64, 200, 255, .5));
+    border: 1px solid rgba(167, 224, 255, .55);
+    box-shadow: 0 0 14px rgba(52, 155, 255, .32);
+}
+
+.hudTitles {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.hudTitle {
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: .15px;
+    color: #ffffff;
+}
+
+.hudSubtitle {
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .1px;
+    color: rgba(226, 235, 255, .95);
+}
+
+.hudMeta {
+    margin-top: 8px;
+    padding-top: 7px;
+    border-top: 1px solid rgba(255, 255, 255, .14);
+    font-size: 12.5px;
+    font-weight: 500;
+    color: rgba(220, 230, 255, .88);
+}
+
+.hudRisk {
+    margin-top: 10px;
+    font-size: 14px;
 }
 
 #risk {

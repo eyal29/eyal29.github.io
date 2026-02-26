@@ -67,8 +67,7 @@ addEventListener("keydown", (event) => {
 // ---------- Scene ----------
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x07080a);
-// Fog doux (pas agressif => pas d’écran noir)
-// scene.fog = new THREE.Fog(0x07080a, 80, 400);
+scene.fog = new THREE.Fog(0x9ab6d2, 120, 980);
 
 // ---------- Camera ----------
 const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.1, 2000);
@@ -138,6 +137,126 @@ const road = new THREE.Mesh(new THREE.BoxGeometry(roadLen, roadW, 0.25), asphalt
 road.position.set(40, 0, -0.13);
 road.receiveShadow = true;
 scene.add(road);
+
+const INFINITE_EXT_LEN = 950;
+const roadExtMat = new THREE.MeshStandardMaterial({
+  color: 0x171a1d,
+  roughness: 0.96,
+  metalness: 0.0
+});
+
+const roadExtLeft = new THREE.Mesh(new THREE.BoxGeometry(INFINITE_EXT_LEN, roadW, 0.24), roadExtMat);
+roadExtLeft.position.set(40 - roadLen / 2 - INFINITE_EXT_LEN / 2, 0, -0.14);
+roadExtLeft.receiveShadow = true;
+scene.add(roadExtLeft);
+
+const roadExtRight = new THREE.Mesh(new THREE.BoxGeometry(INFINITE_EXT_LEN, roadW, 0.24), roadExtMat);
+roadExtRight.position.set(40 + roadLen / 2 + INFINITE_EXT_LEN / 2, 0, -0.14);
+roadExtRight.receiveShadow = true;
+scene.add(roadExtRight);
+
+const farLineMat = new THREE.MeshStandardMaterial({
+  color: 0xe5e7ea,
+  roughness: 0.5,
+  emissive: new THREE.Color(0x101316),
+  emissiveIntensity: 0.18
+});
+
+function addFarRoadLine(x, y, len) {
+  const line = new THREE.Mesh(new THREE.BoxGeometry(len, 0.09, 0.015), farLineMat);
+  line.position.set(x, y, 0.01);
+  line.receiveShadow = true;
+  scene.add(line);
+}
+
+for (let i = 1; i < laneCount; i++) {
+  const y = -roadW / 2 + i * laneW;
+  addFarRoadLine(roadExtLeft.position.x, y, INFINITE_EXT_LEN * 0.92);
+  addFarRoadLine(roadExtRight.position.x, y, INFINITE_EXT_LEN * 0.92);
+}
+
+// ---------- Environnement réaliste ----------
+function makeSkyTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1024;
+  canvas.height = 512;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  grad.addColorStop(0, "#7fb4ff");
+  grad.addColorStop(0.42, "#b9d6ff");
+  grad.addColorStop(1, "#e6efe6");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.globalAlpha = 0.12;
+  for (let i = 0; i < 55; i++) {
+    const x = Math.random() * canvas.width;
+    const y = 40 + Math.random() * 220;
+    const w = 80 + Math.random() * 220;
+    const h = 24 + Math.random() * 62;
+    const cloudGrad = ctx.createRadialGradient(x, y, 2, x, y, w);
+    cloudGrad.addColorStop(0, "rgba(255,255,255,0.95)");
+    cloudGrad.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = cloudGrad;
+    ctx.beginPath();
+    ctx.ellipse(x, y, w, h, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.needsUpdate = true;
+  return tex;
+}
+
+const skyTex = makeSkyTexture();
+if (skyTex) {
+  const skyMat = new THREE.MeshBasicMaterial({ map: skyTex, side: THREE.BackSide });
+  const skyDome = new THREE.Mesh(new THREE.SphereGeometry(900, 48, 30), skyMat);
+  skyDome.position.set(40, 0, -120);
+  scene.add(skyDome);
+}
+
+const terrainMat = new THREE.MeshStandardMaterial({ color: 0x5f7259, roughness: 0.98, metalness: 0.0 });
+const terrain = new THREE.Mesh(new THREE.PlaneGeometry(900, 320, 1, 1), terrainMat);
+terrain.position.set(40, 0, -0.26);
+terrain.receiveShadow = true;
+scene.add(terrain);
+
+const shoulderMat = new THREE.MeshStandardMaterial({ color: 0x5a6552, roughness: 0.95, metalness: 0.0 });
+const shoulderTop = new THREE.Mesh(new THREE.BoxGeometry(roadLen + 10, 3.0, 0.08), shoulderMat);
+shoulderTop.position.set(40, roadW / 2 + 1.5, -0.17);
+shoulderTop.receiveShadow = true;
+const shoulderBottom = shoulderTop.clone();
+shoulderBottom.position.y = -roadW / 2 - 1.5;
+scene.add(shoulderTop, shoulderBottom);
+
+const hillMatNear = new THREE.MeshStandardMaterial({ color: 0x63785d, roughness: 0.92, metalness: 0.0 });
+const hillMatFar = new THREE.MeshStandardMaterial({ color: 0x556a58, roughness: 0.95, metalness: 0.0 });
+
+function addHillBelt(yBase, count, span, zBase, mat, seed) {
+  for (let i = 0; i < count; i++) {
+    const t = i / Math.max(1, count - 1);
+    const wobble = Math.sin((t * 6 + seed) * Math.PI) * 3.2;
+    const x = 40 - span / 2 + t * span + wobble;
+    const radius = 7 + ((i + seed * 3) % 4) * 1.8;
+    const height = 7 + ((i * 2 + seed * 5) % 5) * 1.7;
+    const hill = new THREE.Mesh(new THREE.ConeGeometry(radius, height, 12), mat);
+    hill.rotation.x = Math.PI / 2;
+    hill.position.set(x, yBase + (i % 2 === 0 ? 1.5 : -1.5), zBase + height * 0.5);
+    hill.castShadow = true;
+    hill.receiveShadow = true;
+    scene.add(hill);
+  }
+}
+
+addHillBelt(62, 18, 300, 0, hillMatFar, 1.3);
+addHillBelt(-62, 18, 300, 0, hillMatFar, 2.1);
+addHillBelt(46, 14, 260, 0, hillMatNear, 3.4);
+addHillBelt(-46, 14, 260, 0, hillMatNear, 4.2);
 
 // ---------- Road markings ----------
 const lineMat = new THREE.MeshStandardMaterial({

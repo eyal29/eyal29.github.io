@@ -314,7 +314,9 @@ canvas {
     right: 14px;
     top: 14px;
     display: flex;
+    flex-wrap: wrap;
     gap: clamp(4px, 0.6vw, 7px);
+    row-gap: 4px;
     align-items: center;
     font-family: system-ui, Segoe UI, Arial;
     color: #fff;
@@ -323,6 +325,14 @@ canvas {
     padding: clamp(4px, 0.6vw, 7px) clamp(6px, 0.8vw, 9px);
     border-radius: clamp(8px, 1vw, 11px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, .30);
+}
+
+#controls input[type="range"] {
+    min-width: 0;
+}
+
+#controls label {
+    white-space: normal;
 }
 
 #topStatus {
@@ -438,7 +448,7 @@ input[type="range"] {
     #realViewCard {
         top: auto;
         right: 10px;
-        bottom: 58px;
+        bottom: 68px;
         width: min(150px, 36vw);
         padding: 7px;
         border-radius: 14px;
@@ -461,6 +471,15 @@ input[type="range"] {
         max-width: 34vw;
         right: 10px;
         top: 10px;
+    }
+
+    #controls label {
+        flex: 1 1 100%;
+    }
+
+    #controls input[type="range"] {
+        flex: 1 1 100%;
+        width: 100%;
     }
 
     #topStatus {

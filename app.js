@@ -1398,18 +1398,6 @@ function resetCamera() {
   refreshTopStatus();
 }
 
-// traffic slider
-const trafficSlider = document.getElementById("traffic");
-trafficSlider.addEventListener("input", () => {
-  const desired = parseInt(trafficSlider.value, 10);
-  while (cars.length < desired) createCar(cars.length);
-  while (cars.length > desired) {
-    const c = cars.pop();
-    scene.remove(c);
-  }
-  refreshTopStatus();
-});
-
 let paused = false;
 const btnPlay = document.getElementById("btnPlay");
 btnPlay.onclick = () => {
